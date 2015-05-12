@@ -78,8 +78,12 @@ public class APIClient {
     private final HttpHost uaHost;
     private final Optional<ProxyInfo> proxyInfo;
 
+    /* Timeouts */
+    private final int connectionTimeoutMilliSeconds;
+    private final int socketTimeoutMilliSeconds;
 
-    private APIClient(String appKey, String appSecret, String baseURI, Number version, Optional<ProxyInfo> proxyInfoOptional) {
+
+    private APIClient(String appKey, String appSecret, String baseURI, Number version, Optional<ProxyInfo> proxyInfoOptional, int connectionTimeoutMilliSeconds, int socketTimeoutMilliSeconds) {
         Preconditions.checkArgument(StringUtils.isNotBlank(appKey),
                 "App key must be provided.");
         Preconditions.checkArgument(StringUtils.isNotBlank(appSecret),
@@ -90,6 +94,8 @@ public class APIClient {
         this.version = version;
         this.uaHost = new HttpHost(URI.create(baseURI).getHost(), 443, "https");
         this.proxyInfo = proxyInfoOptional;
+        this.connectionTimeoutMilliSeconds = connectionTimeoutMilliSeconds;
+        this.socketTimeoutMilliSeconds = socketTimeoutMilliSeconds;
     }
 
     public static Builder newBuilder() {
@@ -106,6 +112,14 @@ public class APIClient {
 
     public String getAppKey() {
         return appKey;
+    }
+
+    public int getConnectionTimeoutMilliSeconds() {
+        return connectionTimeoutMilliSeconds;
+    }
+
+    public int getSocketTimeoutMilliSeconds() {
+        return socketTimeoutMilliSeconds;
     }
 
     /* Add the version number to the default version header */
@@ -139,7 +153,9 @@ public class APIClient {
     private Request provisionRequest(Request object) {
         object.config(CoreProtocolPNames.USER_AGENT, getUserAgent())
                 .addHeader(CONTENT_TYPE_KEY, versionedAcceptHeader(version))
-                .addHeader(ACCEPT_KEY, versionedAcceptHeader(version));
+                .addHeader(ACCEPT_KEY, versionedAcceptHeader(version))
+                .connectTimeout(connectionTimeoutMilliSeconds)
+                .socketTimeout(socketTimeoutMilliSeconds);
 
         if (proxyInfo.isPresent()) {
             object.viaProxy(proxyInfo.get().getProxyHost());
@@ -150,7 +166,9 @@ public class APIClient {
 
     private Request provisionRequestWithoutContentType(Request object) {
         object.config(CoreProtocolPNames.USER_AGENT, getUserAgent())
-                .addHeader(ACCEPT_KEY, versionedAcceptHeader(version));
+                .addHeader(ACCEPT_KEY, versionedAcceptHeader(version))
+                .connectTimeout(connectionTimeoutMilliSeconds)
+                .socketTimeout(socketTimeoutMilliSeconds);
 
         if (proxyInfo.isPresent()) {
             object.viaProxy(proxyInfo.get().getProxyHost());
@@ -859,10 +877,14 @@ public class APIClient {
         private String baseURI;
         private Number version;
         private ProxyInfo proxyInfoOptional;
+        private int connectionTimeoutMilliSeconds;
+        private int socketTimeoutMilliSeconds;
 
         private Builder() {
             baseURI = "https://go.urbanairship.com";
             version = 3;
+            connectionTimeoutMilliSeconds = -1;
+            socketTimeoutMilliSeconds = -1;
         }
 
         public Builder setKey(String key) {
@@ -890,13 +912,23 @@ public class APIClient {
             return this;
         }
 
+        public Builder setConnectionTimeoutMilliSeconds(int connectionTimeoutMilliSeconds) {
+            this.connectionTimeoutMilliSeconds = connectionTimeoutMilliSeconds;
+            return this;
+        }
+
+        public Builder setSocketTimeoutMilliSeconds(int socketTimeoutMilliSeconds) {
+            this.socketTimeoutMilliSeconds = socketTimeoutMilliSeconds;
+            return this;
+        }
+
         public APIClient build() {
             Preconditions.checkNotNull(key, "app key needed to build APIClient");
             Preconditions.checkNotNull(secret, "app secret needed to build APIClient");
             Preconditions.checkNotNull(baseURI, "base URI needed to build APIClient");
             Preconditions.checkNotNull(version, "version needed to build APIClient");
 
-            return new APIClient(key, secret, baseURI, version, Optional.fromNullable(proxyInfoOptional));
+            return new APIClient(key, secret, baseURI, version, Optional.fromNullable(proxyInfoOptional), connectionTimeoutMilliSeconds, socketTimeoutMilliSeconds);
         }
 
     }

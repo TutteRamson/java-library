@@ -52,6 +52,8 @@ public class APIClientTest {
     public final static String ACCEPT_KEY = "Accept";
     public final static String APP_JSON = "application/vnd.urbanairship+json; version=3;";
     public final static String ACCEPT_HEADER_VALUE = APP_JSON;
+    public final static int CONNECTION_TIMEOUT = 1000;
+    public final static int SOCKET_TIMEOUT = 2000;
 
     static {
         BasicConfigurator.configure();
@@ -84,6 +86,20 @@ public class APIClientTest {
         assertEquals("App key incorrect", "key", client.getAppKey());
         assertEquals("App secret incorrect", "secret", client.getAppSecret());
         assertFalse(client.getProxyInfo().isPresent());
+        assertEquals("Connection timeout is not set correctly", -1, client.getConnectionTimeoutMilliSeconds());
+        assertEquals("Socket timeout is not set correctly", -1, client.getSocketTimeoutMilliSeconds());
+    }
+
+    @Test
+    public void testAPIClientBuilderTimeoutValues() {
+        APIClient client = APIClient.newBuilder()
+                .setKey("key")
+                .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
+                .build();
+        assertEquals("Connection timeout is not set correctly", CONNECTION_TIMEOUT, client.getConnectionTimeoutMilliSeconds());
+        assertEquals("Socket timeout is not set correctly", SOCKET_TIMEOUT, client.getSocketTimeoutMilliSeconds());
     }
 
     @Test
@@ -152,6 +168,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         assertFalse(client.getProxyInfo().isPresent());
@@ -219,6 +237,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .setProxyInfo(ProxyInfo.newBuilder()
                         .setProxyHost(new HttpHost("localhost", 8080))
                         .setProxyCredentials(new UsernamePasswordCredentials("user", "password"))
@@ -292,6 +312,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         // Setup a stubbed response for the server
@@ -341,6 +363,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         // Setup a stubbed response for the server
@@ -379,6 +403,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         // Setup a stubbed response for the server
@@ -428,6 +454,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         // Setup a stubbed response for the server
@@ -479,6 +507,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         PushPayload pushPayload = PushPayload.newBuilder()
@@ -549,6 +579,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         PushPayload pushPayload = PushPayload.newBuilder()
@@ -602,6 +634,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(delete(urlEqualTo("/api/schedules/puppies"))
@@ -640,6 +674,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         PushPayload payload = PushPayload.newBuilder()
@@ -675,6 +711,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         // Setup a stubbed response for the server
@@ -713,6 +751,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(put(urlEqualTo("/api/tags/puppies"))
@@ -745,6 +785,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(delete(urlEqualTo("/api/tags/puppies"))
@@ -777,6 +819,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(post(urlEqualTo("/api/tags/puppies"))
@@ -809,6 +853,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(post(urlEqualTo("/api/tags/batch/"))
@@ -845,6 +891,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String jsonResponse = "{\n" +
@@ -931,6 +979,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String jsonResponse = "{\n" +
@@ -1017,6 +1067,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String jsonResponse = "{\n" +
@@ -1108,6 +1160,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String jsonResponse = "{\n" +
@@ -1199,6 +1253,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String jsonResponse = "{\n" +
@@ -1293,6 +1349,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String jsonResponse = "{\n" +
@@ -1387,6 +1445,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String testresponse = "{\n" +
@@ -1440,6 +1500,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String testresponse = "{\n" +
@@ -1495,6 +1557,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String testresponse = "{\n" +
@@ -1548,6 +1612,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String testresponse = "{  \n" +
@@ -1650,6 +1716,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(post(urlEqualTo("/api/segments/"))
@@ -1691,6 +1759,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(put(urlEqualTo("/api/segments/abc"))
@@ -1732,6 +1802,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(delete(urlEqualTo("/api/segments/abc"))
@@ -1860,6 +1932,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(get(urlEqualTo("/api/channels/"))
@@ -1889,6 +1963,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/push/stats/?start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000&format=csv";
@@ -1974,6 +2050,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/push/stats/?start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000&format=json";
@@ -2050,6 +2128,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/push/stats/?start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000&format=json";
@@ -2116,6 +2196,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/push/stats/?start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000&format=csv";
@@ -2183,6 +2265,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/responses/abc";
@@ -2214,6 +2298,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/responses/list?start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000";
@@ -2280,6 +2366,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/responses/list?start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000&limit=1&push_id_start=start_push";
@@ -2348,6 +2436,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/perpush/detail/push_id";
@@ -2399,6 +2489,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/perpush/series/push_id";
@@ -2513,6 +2605,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/perpush/series/push_id?precision=DAILY";
@@ -2627,6 +2721,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/perpush/series/push_id?precision=DAILY&start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000";
@@ -2742,6 +2838,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/opens/?precision=MONTHLY&start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000";
@@ -2782,6 +2880,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         String queryPathString = "/api/reports/timeinapp/?precision=MONTHLY&start=2014-10-01T12%3A00%3A00.000&end=2014-10-03T12%3A00%3A00.000";
@@ -2823,6 +2923,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(put(urlEqualTo(requestPath))
@@ -2858,6 +2960,8 @@ public class APIClientTest {
                 .setBaseURI("http://localhost:8080")
                 .setKey("key")
                 .setSecret("secret")
+                .setConnectionTimeoutMilliSeconds(CONNECTION_TIMEOUT)
+                .setSocketTimeoutMilliSeconds(SOCKET_TIMEOUT)
                 .build();
 
         stubFor(delete(urlEqualTo(requestPath))
@@ -2883,4 +2987,5 @@ public class APIClientTest {
             fail("Exception thrown " + ex);
         }
     }
+
 }
